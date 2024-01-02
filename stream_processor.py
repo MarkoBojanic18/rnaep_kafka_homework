@@ -3,8 +3,8 @@ import requests, json
 
 #configuration
 bootstrap_servers = 'localhost:9092'
-input_topic = 'forecast-weather-raw'
-output_topic = 'forcast_prep_weather'
+input_topic = 'forcast-weather-raw'
+output_topic = 'forcast-weather-proc'
 
 #consumer
 consumer = KafkaConsumer(input_topic, bootstrap_servers=bootstrap_servers,value_deserializer=lambda x:json.loads(x.decode('utf-8')))

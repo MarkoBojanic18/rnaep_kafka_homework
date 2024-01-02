@@ -1,12 +1,11 @@
-import json  
-
-import requests  
-
-from kafka import KafkaProducer  
+import json
+import time
+import requests
+from kafka import KafkaProducer
 
 # Initialize Kafka producer  
 
-producer = KafkaProducer(bootstrap_servers='localhost:9092', acks='all')  
+producer = KafkaProducer(bootstrap_servers='localhost:9092', value_serializer=lambda v: json.dumps(v).encode('utf-8'));  
 
 # Weather API configuration  
 
@@ -27,10 +26,10 @@ def fetch():
         response = requests.get(weather_api_url)
 
         if response.status_code == 200:
-            weather_data = response.jsno()
+            weather_data = response.json()
             return weather_data
         else:
-            print(f"Could fetch data from API: {response.status_code}")
+            print(f"Could not fetch data from API: {response.status_code}")
             return None
     except Exception as e:
         print(f"Exception occured:{str(e)}")
@@ -40,8 +39,10 @@ def send_data():
     while True:
         weather_data = fetch()
         if weather_data:
-            producer.send('forecast-weather-raw',value=weather_data)
+            producer.send('forcast-weather-raw',value=weather_data)
             print("Send data to Kafka:",weather_data)
+
+        time.sleep(5)
 
 if __name__ == "__main__":
     send_data()
