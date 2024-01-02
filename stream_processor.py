@@ -3,7 +3,7 @@ import requests, json
 
 #configuration
 bootstrap_servers = 'localhost:9092'
-input_topic = 'forcast_raw_weather'
+input_topic = 'forecast-weather-raw'
 output_topic = 'forcast_prep_weather'
 
 #consumer

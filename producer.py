@@ -22,14 +22,26 @@ weather_api_url = f'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lo
 
 # Fetch weather data from the Weather API  
 
-response = requests.get(weather_api_url)  
+def fetch():
+    try:
+        response = requests.get(weather_api_url)
 
-weather_data = json.dumps(response.json())  
+        if response.status_code == 200:
+            weather_data = response.jsno()
+            return weather_data
+        else:
+            print(f"Could fetch data from API: {response.status_code}")
+            return None
+    except Exception as e:
+        print(f"Exception occured:{str(e)}")
+        return None
+    
+def send_data():
+    while True:
+        weather_data = fetch()
+        if weather_data:
+            producer.send('forecast-weather-raw',value=weather_data)
+            print("Send data to Kafka:",weather_data)
 
-# Send weather data to Kafka topic  
-
-producer.send('forcast_raw_weather', value=weather_data.encode('utf-8'))  
-
-# Close the producer  
-
-producer.close() 
+if __name__ == "__main__":
+    send_data()
