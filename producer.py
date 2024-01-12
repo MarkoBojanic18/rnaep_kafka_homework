@@ -1,6 +1,6 @@
 import json
-import time
 import requests
+import time
 from kafka import KafkaProducer
 
 # Initialize Kafka producer  
@@ -41,7 +41,7 @@ def send_data():
         if weather_data:
             producer.send('forcast-weather-raw',value=weather_data)
             print("Send data to Kafka:",weather_data)
-
+        
         time.sleep(5)
 
 if __name__ == "__main__":
